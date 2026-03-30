@@ -26,12 +26,14 @@ def show_character(char):
     if list(char[name][5].keys())==[]:
         print('Inventory empty.')
 
+
 def point_holder(total):
     def use_points(amount):
         nonlocal total
         total -= amount
         return total
     return use_points
+
 
 #create function distribute, get POINTS
 def distribute(points):

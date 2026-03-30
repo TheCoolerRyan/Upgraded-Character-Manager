@@ -1,5 +1,5 @@
 #I had to do this because circular imports are apparently illegal
-import levi_code,ryan_pseducode,edwings_psedocode
+import levi_code,ryan_pseducode, edwings_psedocode
 
 #create function main
 def main():

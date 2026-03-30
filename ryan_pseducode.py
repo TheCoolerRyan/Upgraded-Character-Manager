@@ -258,16 +258,7 @@ def inventor(character):
     return character
 
 
-
-
-
-
-
-#This is just here for later referance and help for logic.
-#key = ["class","strength","speed","intelegence","Dictionary for the skill with discription","inventory dictionary", "level"]
-
-#example for class would be --> dictionary[character_name][0]
-
+#Simmplyfiying
 def simple(input):
     input = (input).strip().lower()
     return input
