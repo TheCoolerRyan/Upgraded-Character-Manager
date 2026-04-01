@@ -1,8 +1,11 @@
 import random
 import csv
 import ast
+import pandas as pd
+import numpy as np
 
 class Characters:
+    #Use @staticmethod to cut some corners
     @staticmethod
     def display_characters(chars):
         print('\nCharacters:')
@@ -224,7 +227,7 @@ class Characters:
     @staticmethod
     def save(characters):
         try:
-            filename = 'C:/Users/ryan.crop/Documents/Upgraded-Character-Manager/.docs/character_data.csv'
+            filename = '.docs\character_data.csv'
             with open(filename, mode='w', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
                 writer.writerow(['Name', 'Data'])
@@ -237,7 +240,7 @@ class Characters:
     def pull():
         try:
             characters = {}
-            with open("C:/Users/ryan.crop/Documents/Upgraded-Character-Manager/.docs/character_data.csv", mode='r', encoding='utf-8') as file:
+            with open(".docs\character_data.csv", mode='r', encoding='utf-8') as file:
                 reader = csv.reader(file)
                 for row in reader:
                     char_name = row[0]
@@ -312,6 +315,49 @@ class Create:
         characters[name][4] = {list(skills[clas].keys())[0]: skills[clas][list(skills[clas].keys())[0]]}
         return characters
 
+class DataVisualization:
+    def __init__(self, strength, speed, intelligence):
+        self.strength = strength
+        self.speed = speed
+        self.intelligence = intelligence
+        
+    def graph(self):
+        data = {
+                'Stat': ['Strength', 'Speed', 'Intelligence'],
+                'Value': [self.strength, self.speed, self.intelligence]
+                }
+        df = pd.DataFrame(data)
+
+        #Define block characters
+        block = '█'
+        empty = '░'
+
+        #Create the bars
+        def create_bar(percent):
+            num_blocks = int(percent / 10) # 10 blocks = 100%
+            return block * num_blocks + empty * (10 - num_blocks)
+
+        df['Bar'] = df['Value'].apply(create_bar)
+
+        #Display in terminal
+        for _, row in df.iterrows():
+            print(f"│ {row['Stat']:<12}: {row['Bar']} {row['Value']}% │")
+
+
+#Code to implement the graph
+"""strength = list(show_char.values())[0][1]
+strength = int(strength)*10
+speed = list(show_char.values())[0][2]
+speed = int(speed)*10
+intelegience = list(show_char.values())[0][3]
+intelegience = int(intelegience)*10
+data = DataVisualization(strength, speed, intelegience)
+data.graph()"""
+
+
 def simple(input):
     input = (input).strip().lower()
     return input
+
+
+

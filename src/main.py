@@ -36,7 +36,7 @@ def main():
             if choice == '1':
                 show_char = Characters.search(chars)
                 if show_char:
-                    show_character(show_char)
+                    Characters.show_character(show_char)
             elif choice == '2':
                 selected = Characters.search(chars)
                 choice = simple(input('\n1. Modify inventory\n2. Level up\n3. Remove\n4. Change stats\n5. Exit\n'))
@@ -72,5 +72,7 @@ def main():
             break
 
         Characters.save(chars)
+
+        
 
 main()
