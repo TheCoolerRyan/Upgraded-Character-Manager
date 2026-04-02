@@ -37,6 +37,15 @@ def main():
                 show_char = Characters.search(chars)
                 if show_char:
                     Characters.show_character(show_char)
+                    #Code to implement the graph
+                    strength = list(show_char.values())[0][1]
+                    strength = int(strength)*10
+                    speed = list(show_char.values())[0][2]
+                    speed = int(speed)*10
+                    intelegience = list(show_char.values())[0][3]
+                    intelegience = int(intelegience)*10
+                    data = DataVisualization(strength, speed, intelegience)
+                    data.graph()
             elif choice == '2':
                 selected = Characters.search(chars)
                 choice = simple(input('\n1. Modify inventory\n2. Level up\n3. Remove\n4. Change stats\n5. Exit\n'))

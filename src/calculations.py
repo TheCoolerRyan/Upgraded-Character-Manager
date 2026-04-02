@@ -2,6 +2,8 @@ import random
 import csv
 import ast
 import pandas as pd
+from faker import Faker
+from faker.providers import DynamicProvider
 import numpy as np
 
 class Characters:
@@ -23,6 +25,7 @@ class Characters:
             print(f'{i}:\n{char[name][5][i]}')
         if list(char[name][5].keys()) == []:
             print('Inventory empty.')
+        print(f"Backstory: {char[name][7]}")
 
     @staticmethod
     def level_up(char, skills):
@@ -255,6 +258,7 @@ class Characters:
 
 
 class Create:
+    
     @staticmethod
     def distribute(points):
         def use_points(amount):
@@ -292,29 +296,59 @@ class Create:
         scores[2] += use_points(0)
         return scores[0], scores[1], scores[2]
 
+
     @staticmethod
     def create(characters, skills):
-        name = input("What would you wish your character name to be?: ")
-        characters[name] = ['', 0, 0, 0, {'name':'description'}, {}, 1]
-        while True:
-            clas = input("\nPlease select the class you want to choose\n1:Archer\n2:Knight\n3:Wizard\n")
-            if clas in ["1", "2", "3"]:
-                break
-            else:
-                print("Select again")
-        if clas == "1":
-            clas='archer'
-        elif clas == "2":
-            clas='knight'
-        elif clas == "3":
-            clas='wizard'
-        characters[name][0] = clas
-        print("\nYour stats are:\nStrength\nSpeed\nIntelligence")
-        characters[name][1], characters[name][2], characters[name][3] = Create.distribute(random.randint(5, 10))
-        print("\nYou have one skill right now, but if you level up, you will unlock more")
-        characters[name][4] = {list(skills[clas].keys())[0]: skills[clas][list(skills[clas].keys())[0]]}
-        return characters
+        choice = input("Would you like to create your own character or have a random one made for you? (1 for custom, 2 for random):").strip()
+        if choice == "1":
+            name = input("What would you wish your character name to be?: ")
+            characters[name] = ['', 0, 0, 0, {'name':'description'}, {}, 1, ""]
+            while True:
+                clas = input("\nPlease select the class you want to choose\n1:Archer\n2:Knight\n3:Wizard\n")
+                if clas in ["1", "2", "3"]:
+                    break
+                else:
+                    print("Select again")
+            if clas == "1":
+                clas='archer'
+            elif clas == "2":
+                clas='knight'
+            elif clas == "3":
+                clas='wizard'
+            characters[name][0] = clas
+            print("\nYour stats are:\nStrength\nSpeed\nIntelligence")
+            characters[name][1], characters[name][2], characters[name][3] = Create.distribute(random.randint(5, 10))
+            print("\nYou have one skill right now, but if you level up, you will unlock more")
+            characters[name][4] = {list(skills[clas].keys())[0]: skills[clas][list(skills[clas].keys())[0]]}
+            characters[name][5]= input("Please give me the backstory of your character and its description (Optional, just click enter if you want to skip this):")
+            return characters
+        elif choice == "2":
+            print("Creating random character")
+            fake = Faker()
+            name = fake.name()
+            characters[name] = ['', 0, 0, 0, {'name':'description'}, {}, 1, {}]
+            num = fake.random_int(min = 1, max = 3)
+            backstory_elements = DynamicProvider(
+            provider_name="origin_story",
+            elements=["grew up in a traveling circus", "was a disgraced noble", "escaped a hidden monastery"])
+            fake.add_provider(backstory_elements)
+            backstory = fake.origin_story()
+            if num == 1:
+                clas='archer'
+            elif num == 2:
+                clas='knight'
+            elif num == 3:
+                clas='wizard'
+            strength = fake.random_int(min = 1, max = 4)
+            speed = fake.random_int(min = 1, max = 4)
+            intelegence = fake.random_int(min = 1, max = 4)
 
+            characters[name] = [clas,strength,speed,intelegence, {list(skills[clas].keys())[0]: skills[clas][list(skills[clas].keys())[0]]}, {}, 1, backstory]
+            Characters.show_character({name:characters[name]})
+            return characters
+
+        else:
+            print("Invalid inport... Please put 1 or 2")
 class DataVisualization:
     def __init__(self, strength, speed, intelligence):
         self.strength = strength
@@ -344,15 +378,6 @@ class DataVisualization:
             print(f"│ {row['Stat']:<12}: {row['Bar']} {row['Value']}% │")
 
 
-#Code to implement the graph
-"""strength = list(show_char.values())[0][1]
-strength = int(strength)*10
-speed = list(show_char.values())[0][2]
-speed = int(speed)*10
-intelegience = list(show_char.values())[0][3]
-intelegience = int(intelegience)*10
-data = DataVisualization(strength, speed, intelegience)
-data.graph()"""
 
 
 def simple(input):
